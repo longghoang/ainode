@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Gửi Xe Thông Minh</title>
+    <link rel="shortcut icon" href="/logos/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/css/reset.css">
+	<link rel="stylesheet" href="/css/header.css">
+	<link rel="stylesheet" href="/css/auth.css">
+	<link rel="stylesheet" href="/css/banner.css">
+</head>
+<body>
+	<%- include('partials/header')%>
+    <div class="app">
+		<video class="video" autoplay muted loop>
+			<source src="/videos/sea2s.mp4" type="video/mp4">
+		</video>
+		<% if (typeof status === 'string') { %>
+			<%- include('partials/banner')%>
+		<% } %>
+		<div class="container" id="container">
+			<div class="form__container sign__up">
+				<form action="/auth/register" method="post" id="form1">
+					<h1>Create Account</h1>
+					<div class="social__icons">
+						<a href="#" class="icon" id="googleRegister"><i class="fa-brands fa-google"></i></a>
+						<a href="#" class="icon" id="facebookRegister"><i class="fa-brands fa-facebook"></i></a>
+						<a href="#" class="icon" id="githubRegister"><i class="fa-brands fa-github"></i></a>
+						<a href="#" class="icon" id="twitterRegister"><i class="fa-brands fa-x-twitter"></i></a>
+					</div>
+					<div class="form__group">
+						<label for="form1Email" class="form__label">Email</label>
+						<input id="form1Email" name="email" type="text" placeholder="VD: email@domain.com" class="form-control">
+						<span class="form__message"></span>
+					</div>
+					<div class="form__group">
+						<label for="form1Password" class="form__label">Password</label>
+						<input id="form1Password" name="password" type="password" class="form-control">
+						<span class="form__message"></span>
+					</div>
+					<div class="form__group">
+						<label for="form1PasswordConfirmation" class="form__label">Confirm password!</label>
+						<input id="form1PasswordConfirmation" type="password" class="form-control">
+						<span class="form__message"></span>
+					</div>
+					<button type="submit">Sign Up</button>
+				</form>
+			</div>
+			<div class="form__container sign__in">
+				<form action="/auth/login" method="post" id="form2">
+					<h1>Sign In</h1>
+					<div class="social__icons">
+						<a href="#" class="icon" id="googleLogin"><i class="fa-brands fa-google"></i></a>
+						<a href="#" class="icon" id="facebookLogin"><i class="fa-brands fa-facebook"></i></a>
+						<a href="#" class="icon" id="githubLogin"><i class="fa-brands fa-github"></i></a>
+						<a href="#" class="icon" id="twitterLogin"><i class="fa-brands fa-x-twitter"></i></a>
+					</div>
+					<div class="form__group">
+						<label for="form2Email" class="form__label">Email</label>
+						<input id="form2Email" name="email" type="text" placeholder="VD: email@domain.com" class="form-control">
+						<span class="form__message"></span>
+					</div>
+					<div class="form__group">
+						<label for="form2Password" class="form__label">Password</label>
+						<input id="form2Password" name="password" type="password" class="form-control">
+						<span class="form__message"></span>
+					</div>
+					<div class="forget">
+						<a href="#">Forget Your Password?</a>
+					</div>
+					<button type="submit">Sign In</button>
+				</form>
+			</div>
+			<div class="toggle__container">
+				<div class="toggle">
+					<div class="toggle__panel toggle__left">
+						<h1>Welcome Back!</h1>
+						<p>Enter your personal details to use all of site features</p>
+						<button class="hidden" id="login">Sign In</button>
+					</div>
+					<div class="toggle__panel toggle__right">
+						<h1>Hello, Friend!</h1>
+						<p>Register with your personal details to use all of site features</p>
+						<button class="hidden" id="register">Sign Up</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<form id="redirectRegisterFirebase" action="/auth/register-firebase" method="post" hidden>
+		<input type="hidden" name="email">
+	</form>
+	<form id="redirectLoginFirebase" action="/auth/login-firebase" method="post" hidden>
+		<input type="hidden" name="email">
+	</form>	
+	<script type="module">
+		import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+		import { getAuth, signInWithPopup, GoogleAuthProvider, GithubAuthProvider, FacebookAuthProvider, TwitterAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
+		const firebaseConfig = {
+			apiKey: "AIzaSyD5NWeZUrk9odIEgH7o_ILnMto7YUJggdU",
+			authDomain: "chat-dev-app-fdc6f.firebaseapp.com",
+			projectId: "chat-dev-app-fdc6f",
+			storageBucket: "chat-dev-app-fdc6f.appspot.com",
+			messagingSenderId: "449581428539",
+			appId: "1:449581428539:web:0739c58e3917fe7f77d11e"
+		};
+
+		const app = initializeApp(firebaseConfig);
+		const auth = getAuth(app);
+		const googleProvider = new GoogleAuthProvider();
+		const githubProvider = new GithubAuthProvider();
+		const facebookProvider = new FacebookAuthProvider();
+		const twitterProvider = new TwitterAuthProvider();
+
+		const googleRegister = document.getElementById('googleRegister');
+		const githubRegister = document.getElementById('githubRegister');
+		const facebookRegister = document.getElementById('facebookRegister');
+		const twitterRegister = document.getElementById('twitterRegister');
+
+		const googleLogin = document.getElementById('googleLogin');
+		const githubLogin = document.getElementById('githubLogin');
+		const facebookLogin = document.getElementById('facebookLogin');
+		const twitterLogin = document.getElementById('twitterLogin');
+
+		const redirectRegisterFirebase = document.getElementById('redirectRegisterFirebase');
+		const redirectLoginFirebase = document.getElementById('redirectLoginFirebase');
+
+		async function signin(auth, provider, formRedirect) {
+			try {
+				const user = await signInWithPopup(auth, provider);
+				if(!user) window.location.replace("http://127.0.0.1:3000/auth");
+				const email = user.email;
+				formRedirect.querySelector('input').value = email;
+				formRedirect.submit();
+			} catch (error) {
+				if (error.code === 'auth/account-exists-with-different-credential') {
+					const email = error.customData.email;
+					formRedirect.querySelector('input').value = email;
+					formRedirect.submit();
+				}
+				else {
+					console.error("Lỗi đăng nhập:", error);
+				}
+			}
+		}
+
+		document.addEventListener("DOMContentLoaded", () => {
+			// Register by google
+			googleRegister.addEventListener('click', () => {
+				signin(auth, googleProvider, redirectRegisterFirebase);
+			});
+
+			// Register by github
+			githubRegister.addEventListener('click', () => {
+				signin(auth, githubProvider, redirectRegisterFirebase);
+			});
+
+			// Register by facebook
+			facebookRegister.addEventListener('click', () => {
+				signin(auth, facebookProvider, redirectRegisterFirebase);
+			});
+
+			// Register by twitter
+			twitterRegister.addEventListener('click', () => {
+				signin(auth, twitterProvider, redirectRegisterFirebase);
+			});
+
+			// Login by google
+			googleLogin.addEventListener('click', () => {
+				signin(auth, googleProvider, redirectLoginFirebase);
+			});
+
+			// Login by github
+			githubLogin.addEventListener('click', () => {
+				signin(auth, githubProvider, redirectLoginFirebase);
+			});
+
+			// Login by facebook
+			facebookLogin.addEventListener('click', () => {
+				signin(auth, facebookProvider, redirectLoginFirebase);
+			});
+
+			// Login by twitter
+			twitterLogin.addEventListener('click', () => {
+				signin(auth, twitterProvider, redirectLoginFirebase);
+			});
+		});
+	</script>
+	<script defer src="/js/auth.min.js"></script>
+	<script defer src="/js/validation.min.js"></script>
+	<script>
+        document.addEventListener('DOMContentLoaded', () => {
+			Validator({
+				form: '#form1',
+				formGroupSelector: '.form__group',
+				errorSelector: '.form__message',
+				rules: [
+					Validator.isRequired('#form1Email','Please input email hear!'),
+					Validator.isRequired('#form1Password', 'Please input new password!'),
+					Validator.minLength('#form1Password', 8),
+					Validator.maxLength('#form1Password', 12),
+					Validator.isCorrect('#form1Password', 'Format password is incorrect!'),
+					Validator.isRequired('#form1PasswordConfirmation', 'Please input your password!'),
+					Validator.isComfirmed('#form1PasswordConfirmation',function(){
+						var passwordValue = document.querySelector('#form1 #form1Password'); 
+						return passwordValue.value;
+					},'Password do not match!'),	
+				]
+			});
+			Validator({
+				form: '#form2',
+				formGroupSelector: '.form__group',
+				errorSelector: '.form__message',
+				rules: [
+					Validator.isRequired('#form2Email','Please input email hear!'),
+					Validator.isRequired('#form2Password', 'Please input your password!'),
+				]
+			});
+		})
+    </script>
+</body>
+</html>

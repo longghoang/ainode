@@ -1,0 +1,1 @@
+(()=>{const e=document.getElementById("container"),t=document.getElementById("register"),n=document.getElementById("login");t.addEventListener("click",(()=>{e.classList.add("active")})),n.addEventListener("click",(()=>{e.classList.remove("active")}))})();

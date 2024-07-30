@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Gửi Xe Thông Minh</title>
+    <link rel="shortcut icon" href="/logos/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/help.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+    <%- include('partials/header') %>
+    <div class="app">
+        <% if (typeof helps!=='undefined') { %>
+        <div class="help">
+            Câu hỏi thường gặp
+            <ul class="help__list">
+                <% helps.forEach(function(help){ %>
+                    <li class="help__item">
+                        <h5><%= help.question %></h5>
+                        <p><%= help.answer %></p>
+                    </li>
+                <% }); %>
+            </ul>
+        </div>
+        <% } %>
+        <% if (typeof helpers!=='undefined') { %>
+        <div class="help" style="margin-top: 60px;">
+            Liên hệ nhân viên hỗ trợ
+            <ul class="help__list">
+                <% helpers.forEach(function(helper){ %>
+                    <li class="help__item">
+                        <h5><i class="fa-solid fa-user"></i><%= helper.name %></h5>
+                        <p><i class="fa-solid fa-phone"></i><%= helper.sdt %></p>
+                        <p><i class="fa-regular fa-envelope"></i><%= helper.email %></p>
+                    </li>
+                <% }); %>
+            </ul>
+        </div>
+        <% } %>
+    </div>
+    <%- include('partials/footer') %>
+    <script>
+        $(document).ready(function() {
+            $('.help').eq(0).find('h5').click(function() {
+                $(this).next('p').slideToggle();
+            });
+        })
+    </script>
+</body>
+</html>

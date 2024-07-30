@@ -1,0 +1,35 @@
+{
+  "name": "ai-nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/index.js",
+    "dev": "nodemon --inspect ./src/index.js",
+    "build": "webpack",
+    "build-watch": "webpack --watch",
+    "sass": "sass --style=compressed --no-source-map src/resources/scss:src/public/css",
+    "sass-watch": "sass --style=compressed --no-source-map --watch src/resources/scss:src/public/css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.2",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "firebase-admin": "^12.3.0",
+    "http-errors": "^2.0.0",
+    "mongoose": "^8.4.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4",
+    "sass": "^1.77.6",
+    "webpack": "^5.92.1",
+    "webpack-cli": "^5.1.4"
+  }
+}
