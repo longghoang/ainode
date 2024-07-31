@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Gửi Xe Thông Minh</title>
+    <link rel="shortcut icon" href="/logos/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/form.css">
+    <link rel="stylesheet" href="/css/ticket.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+    <div class="container"> 
+        <div class="form__container">
+            <h1>Tờ khai đăng ký vé tháng</h1>
+            <form action="/ticket/register" method="POST">
+                <div class="form__group">
+                    <label for="cardType">Loại vé</label>
+                    <select id="cardType" name="cardType" required>
+                        <option value="1">1 tháng</option>
+                        <option value="2">2 tháng</option>
+                        <option value="3">3 tháng</option>
+                    </select>
+                </div>
+                <div class="form__group">
+                    <label for="fullName">Họ và tên:</label>
+                    <input type="text" id="fullName" name="fullName" class="form__controll" required>
+                </div>
+                <div class="form__group">
+                    <label for="birthDate">Ngày tháng năm sinh:</label>
+                    <input type="date" id="birthDate" name="birthDate" class="form__controll" required>
+                </div>
+                <div class="form__group">
+                    <label for="address">Địa chỉ:</label>
+                    <input type="text" id="address" name="address" class="form__controll" required>
+                </div>
+                <div class="form__group">
+                    <label for="phone">Điện thoại:</label>
+                    <input type="tel" id="phone" name="phone" class="form__controll" required>
+                </div>
+                <div class="form__group">
+                    <label for="registrationDate">Ngày đăng ký nhận vé:</label>
+                    <input type="date" id="registrationDate" name="registrationDate" class="form__controll" required>
+                </div>
+                <div class="form__group">
+                    <label for="homeDelivery">Đăng ký dịch vụ giao vé tận nhà</label>
+                    <div class="form__group__checkbox">
+                        <input type="checkbox" id="homeDelivery" name="homeDelivery">
+                    </div>
+                </div>
+                <div class="form__group">
+                    <label for="receiveLocation">Nơi nhận vé:</label>
+                    <input type="text" id="receiveLocation" name="receiveLocation" class="form__controll" required>
+                </div>
+                <div class="form__group">
+                    <label for="photo">Ảnh làm vé:</label>
+                    <input type="file" id="photo" name="photo" class="form__controll" required>
+                </div>
+                <button type="submit" class="btn__register" style="background-color: #2d7df5;">Đăng ký</button>
+            </form>
+        </div>
+        <div class="note__container">
+            <h2>Lưu ý khi đăng ký vé tháng</h2>
+            <ul>
+                <li><b>Họ và tên:</b> Yêu cầu ghi đầy đủ Họ và Tên tiếng Việt có dấu.</li>
+                <li class="img-model"><b>Ảnh làm thẻ:</b> Kích thước ảnh 3x4 (chấp nhận ảnh tự chụp đúng quy cách). Mặt nhìn thẳng, rõ mặt, nét ảnh, nền 1 màu:
+                    <div style="width: 100%; display: flex; justify-content: center ">
+                        <img src="/imgs/chup-chan-dung.jpg" alt="Ảnh mẫu" width="100" height="125">
+                    </div>
+                </li>
+                <li><b>+ Khi ra lấy thẻ khách hàng phải mang theo bản đăng ký đã có dấu xác nhận của quản lý, và nộp lại cho nhân viên giao hàng</b></li>
+                <li><b>+ Các mục có dấu (*) là bắt buộc phải nhập đầy đủ thông tin!</b></li>
+                <li><b>+ Nếu "Đơn đăng ký" không đúng các quy định trên hệ thống sẽ tự động hủy đơn!</b></li>
+            </ul>
+        </div>
+    </div>   
+    <%- include('partials/footer') %>
+</body>
+</html>

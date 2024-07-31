@@ -1,3 +1,4 @@
+const axios = require('axios');
 const createError = require('http-errors');
 
 class Employ {
@@ -11,9 +12,16 @@ class Employ {
         }
         try {
             const response = await axios.get(`${process.env.AUTH_SERVER}/data`, { headers: { 'Authorization': `Bearer ${act}` }});
-            const user = response.data; 
-            res.json(user);
+            const user = response.data;
+            const email = user.email;
+            const userData = {
+                email,
+                ...req.body
+            }
+            await axios.post(`${process.env.AUTH_SERVER}/register-employ`, userData);
+            res.redirect('/');
         } catch (error) {
+            // console.log(error);
             if (error.response) {
                 next(createError(error.response.status, error.response.data.message));
             } else {

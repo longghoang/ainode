@@ -8,7 +8,6 @@ class IndexModel {
         try {
             const response = await axios.get(`${process.env.AUTH_SERVER}/data`, { headers: { 'Authorization': `Bearer ${act}` } });
             const user = response.data;
-            console.log(user)
             return res.render('index', { user });
         } catch (error) {
             if (error.response) {

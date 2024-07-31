@@ -20,7 +20,7 @@ module.exports = async function errorHandler (err, req, res, next) {
             console.log('Is errorHandle 403');
             const uid = req.signedCookies.uid;
             if(!uid) {
-                res.redirect('/login');
+                res.redirect('/auth');
             }
             try {
                 const user = await UserModel.findById(uid);
@@ -41,8 +41,20 @@ module.exports = async function errorHandler (err, req, res, next) {
                         user
                     });
                 }
+                if(req.url === '/employ/register') {
+                    const response = await axios.get(`${process.env.AUTH_SERVER}/data`, { headers: { 'Authorization': `Bearer ${newAccessToken}` }});
+                    const user = response.data;
+                    const email = user.email;
+                    const userData = {
+                        email,
+                        ...req.body
+                    }
+                    await axios.post(`${process.env.AUTH_SERVER}/register-employ`, userData);
+                    return res.redirect('/');
+                }
                 return res.render('index');
             } catch (error) {
+                console.log(error);
                 return res.status(500).json({ message: 'Failed to get new access token!' });
             }
         case 404:
