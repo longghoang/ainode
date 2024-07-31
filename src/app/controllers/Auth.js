@@ -88,7 +88,7 @@ class Auth {
         }
     }
 
-    async login(req, res) {
+    async login(req, res, next) {
         const userData = req.body;
         if(!userData.email || !userData.password) return res.status(400).json({ message: 'Invalid request data' });
         try {

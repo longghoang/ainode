@@ -8,14 +8,14 @@
             </a>
         </div>
     </div>
-    <% if (typeof isAuth==='undefined' && typeof isMe==='undefined' && typeof isHelp==='undefined' && typeof isEmploy==='undefined' && typeof isTicket==='undefined' && typeof isTicket==='undefined') { %>
+    <% if (typeof isAuth==='undefined' && typeof isMe==='undefined' && typeof isHelp==='undefined' && typeof isEmploy==='undefined' && typeof isTicket==='undefined' && typeof isTicket==='undefined' && typeof isTicket==='undefined') { %>
     <div class="header__ele header__right">
         <nav class="header__funcs">
             <% if (typeof user!=='undefined' && user.level > 10) { %>
             <li class="header__func wrapper__subfuncs" style="cursor: default; position: relative;"><div class="header__link">
                 <i class="fa-solid fa-chevron-down"></i>Managements</div>
                 <ul class="header__subfuncs">
-                    <li class="header__subfunc"><a href="#" class="header__link">Vehicle management</a></li>
+                    <li class="header__subfunc"><a href="/captureface" class="header__link">Vehicle identification</a></li>
                     <li class="header__subfunc"><a href="#" class="header__link">Ticket management</a></li>
                     <li class="header__subfunc"><a href="#" class="header__link">Report statistics</a></li>
                 </ul>

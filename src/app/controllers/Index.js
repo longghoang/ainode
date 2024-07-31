@@ -1,6 +1,7 @@
 const axios = require('axios');
 const createError = require('http-errors');
 
+
 class IndexModel {
     async index (req, res, next) {
         const act = req.signedCookies.act;
@@ -17,6 +18,7 @@ class IndexModel {
             }
         }
     }
+
 }
 
 module.exports = new IndexModel();
