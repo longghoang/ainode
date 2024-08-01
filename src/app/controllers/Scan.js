@@ -7,7 +7,7 @@ faceapi.env.monkeyPatch({ Canvas, Image, ImageData });
 
 class Scan {
     captureface (req, res) {
-        res.render('captureface')
+        res.render('captureface', {isScan: true})
     }
 
     /// scan

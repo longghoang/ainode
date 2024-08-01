@@ -3,289 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Webcam Face Detection</title>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <title>Quản Lý Gửi Xe Thông Minh</title>
+    <link rel="shortcut icon" href="/logos/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/capture.css">
+    <script defer src="/js/face-api.min.js"></script>
+    <script defer src="/js/face.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <style>
-        body, html {
-            height: 100%;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-        }
-        
-        #faceFrame {
+        #videoWrapper {
             position: relative;
-            width: 563px;
-            height: 346px;
-            border: 2px solid #333;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #fff;
+            width: 700px;
+            height: 540px;
         }
-
-        video, canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
+        #video {
             width: 100%;
             height: 100%;
         }
-
         canvas {
-            top: -100px;
-            left: -8px;
-            margin-top: 65px;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
-        
         .controls {
-            margin-top: 20px;
+            margin-top: 24px;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
+            justify-content: space-between;
+            flex-wrap: wrap;
         }
-        
-        button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
+        .controls button {
+            padding: 8px 12px;
+            border-radius: 4px;
             background-color: #007BFF;
-            color: white;
-            font-size: 16px;
+            color: #fff;
             cursor: pointer;
-            transition: background-color 0.3s ease;
         }
-        
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        input[type=text] {
-            padding: 8px;
-            width: 200px;
-            box-sizing: border-box;
-            border: 2px solid #333;
-            border-radius: 5px;
-            margin-top: 5px;
+        .controls input {
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid#ccc;
+            font-size: 16px;
+            width: 100%;
         }
     </style>
 </head>
 <body>
     <%- include('partials/header') %>
-    <div id="faceFrame">
-        <video id="webcam" autoplay playsinline width="100%" height="100%"></video>
-        <canvas id="overlay" width="640" height="360"></canvas>
+
+    <div class="app">
+        <div class="container" style="display: flex; flex-direction: column; justify-content: center; align-items: center; margin-top: 60px;">
+            <div id="videoWrapper">
+                <video id="video" width="700" height="540" autoplay muted></video>
+            </div>
+            <div class="controls">
+                <button onclick="captureFace()"><i class="fa fa-camera"></i> Capture</button>
+                <button onclick="compareFace()"><i class="fa fa-user-check"></i> Compare</button>
+                <div class="input__wrapper" style="width: 100%; margin-top: 12px;">
+                    <input type="text" id="licensePlate" placeholder="Enter license plate">
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="controls">
-        <button onclick="startWebcam()"><i class="fa fa-play"> Start</i></button>
-        <button onclick="stopWebcam()"><i class="fa fa-pause"> Stop</i></button>
-        <button onclick="captureFace()"><i class="fa fa-camera"> Capture</i></button>
-        <button onclick="compareFace()"><i class="fa fa-user-check"> Compare</i></button>
-    </div>
-    <input type="text" id="licensePlate" placeholder="Enter license plate">
-    
-    <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-    <script>
-        let stream;
-        let video;
-        let overlayCanvas;
-        let overlayContext;
-
-        async function startWebcam() {
-            video = document.getElementById('webcam');
-            overlayCanvas = document.getElementById('overlay');
-            overlayContext = overlayCanvas.getContext('2d');
-
-            try {
-                stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                video.srcObject = stream;
-                video.addEventListener('play', detectAndDrawFace); 
-            } catch (error) {
-                console.error('Error accessing webcam:', error);
-            }
-        }
-
-        function stopWebcam() {
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
-            }
-        }
-
-        async function detectAndDrawFace() {
-            const modelPath = '/models';
-            await faceapi.nets.ssdMobilenetv1.loadFromUri(modelPath);
-            await faceapi.nets.faceLandmark68Net.loadFromUri(modelPath);
-            await faceapi.nets.faceRecognitionNet.loadFromUri(modelPath);
-
-            // Detect face and landmarks using SSD Mobilenetv1
-            const detections = await faceapi.detectAllFaces(video, new faceapi.SsdMobilenetv1Options()).withFaceLandmarks().withFaceDescriptors();
-
-            // Clear previous drawings
-            overlayContext.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
-
-            detections.forEach(detection => {
-                const box = detection.detection.box;
-                overlayContext.beginPath();
-                overlayContext.rect(box.x, box.y, box.width, box.height);
-                overlayContext.lineWidth = 2;
-                overlayContext.strokeStyle = 'blue';
-                overlayContext.stroke();
-                overlayContext.closePath();
-            });
-
-            // Draw landmarks on the overlay canvas
-            faceapi.draw.drawFaceLandmarks(overlayCanvas, detections);
-
-            // Call the function again for continuous detection and drawing
-            requestAnimationFrame(detectAndDrawFace);
-        }
-
-        async function captureFace() {
-            const detections = await faceapi.detectAllFaces(video, new faceapi.SsdMobilenetv1Options()).withFaceLandmarks().withFaceDescriptors();
-            if (detections.length > 0) {
-                const faceData = detections.map(d => Array.from(d.descriptor));
-                const licensePlate = document.getElementById('licensePlate').value;
-
-                console.log('Captured face data:', { descriptors: faceData, licensePlate: licensePlate });
-
-                if (!licensePlate) {
-                    Toastify({
-                        text: "Chưa nhập biển số",
-                        duration: 3000,
-                        close: true,
-                        gravity: "top",
-                        position: "right",
-                        backgroundColor: "red",
-                    }).showToast();
-                    return;
-                }
-
-                // Gửi dữ liệu đến server để lưu trữ
-                fetch('/scan/scanCar', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ descriptors: faceData, licensePlate: licensePlate })
-                }).then(response => response.json())
-                  .then(data => console.log('Saved face data:', data))
-                  .catch(error => console.error('Error saving face data:', error));
-
-                Toastify({
-                    text: "Face data has been saved!",
-                    duration: 3000,
-                    close: true,
-                    gravity: "top",
-                    position: "right",
-                    backgroundColor: "green",
-                }).showToast();
-            } else {
-                Toastify({
-                    text: "No faces in front of the camera!!",
-                    duration: 3000,
-                    close: true,
-                    gravity: "top",
-                    position: "right",
-                    backgroundColor: "red",
-                }).showToast();
-            }
-        }
-
-        async function compareFace() {
-            const detections = await faceapi.detectAllFaces(video, new faceapi.SsdMobilenetv1Options()).withFaceLandmarks().withFaceDescriptors();
-            if (detections.length > 0) {
-                const faceData = detections.map(d => Array.from(d.descriptor));
-                const licensePlate = document.getElementById('licensePlate').value;
-
-                // Gửi dữ liệu đến server để so sánh
-                fetch('/scan/compare', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ descriptors: faceData, licensePlate: licensePlate }) 
-
-                }).then(response => response.json())
-                  .then(data => {
-                      console.log('Comparison result:', data);
-
-                      
-                if(!licensePlate) {
-                    Toastify({
-                    text: "License plate not entered !",
-                    duration: 3000,
-                    close: true,
-                    gravity: "top",
-                    position: "right",
-                    backgroundColor: "red",
-                }).showToast();
-                return;
-                    }
-
-                    
-                      if (data.results.length === 0) {
-                          // Không tìm thấy khuôn mặt khớp trong cơ sở dữ liệu
-                          Toastify({
-                              text: "Face not scanned previously!!",
-                              duration: 3000,
-                              close: true,
-                              gravity: "top",
-                              position: "right",
-                              backgroundColor: "orange",
-                          }).showToast();
-                      } else {
-                          // Tìm thấy khuôn mặt khớp, kiểm tra khoảng cách
-                         const matched = data.results.some(r => r.distance < 0.4 && r.licensePlate === licensePlate);
-
-                          if (matched) {
-                              Toastify({
-                                  text: "Face and license plate matched, you can take your vehicle!",
-                                  duration: 3000,
-                                  close: true,
-                                  gravity: "top",
-                                  position: "right",
-                                  backgroundColor: "green",
-                              }).showToast();
-                          } else {
-                              Toastify({
-                                  text: "Face or license plate does not match!",
-                                  duration: 3000,
-                                  close: true,
-                                  gravity: "top",
-                                  position: "right",
-                                  backgroundColor: "red",
-                              }).showToast();
-                          }
-                      }
-                  })
-                  .catch(error => console.error('Error comparing face data:', error));
-
-            } else {
-                Toastify({
-                    text: "No faces in front of the camera!!",
-                    duration: 3000,
-                    close: true,
-                    gravity: "top",
-                    position: "right",
-                    backgroundColor: "red",
-                }).showToast();
-            }
-        }
-
-        window.onload = startWebcam;
-        window.onbeforeunload = function() {
-            stopWebcam();
-        };
-    </script>
 </body>
 </html>
+
+
+
+
+
+ 
