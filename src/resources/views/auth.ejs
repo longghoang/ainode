@@ -129,7 +129,7 @@
 		async function signin(auth, provider, formRedirect) {
 			try {
 				const user = await signInWithPopup(auth, provider);
-				if(!user) window.location.replace("http://127.0.0.1:3001/auth");
+				if(!user) window.location.replace("https://ainode.onrender.com/auth");
 				const email = user.email;
 				formRedirect.querySelector('input').value = email;
 				formRedirect.submit();
@@ -200,7 +200,7 @@
 					Validator.isEmail('#form1Email','Email format is incorrect!'),
 					Validator.isRequired('#form1Password', 'Please input new password!'),
 					Validator.minLength('#form1Password', 8),
-					Validator.maxLength('#form1Password', 12),
+					Validator.maxLength('#form1Password', 255),
 					Validator.isCorrect('#form1Password', 'Format password is incorrect!'),
 					Validator.isRequired('#form1PasswordConfirmation', 'Please input your password!'),
 					Validator.isComfirmed('#form1PasswordConfirmation',function(){
@@ -218,7 +218,7 @@
 					Validator.isEmail('#form2Email','Email format is incorrect!'),
 					Validator.isRequired('#form2Password', 'Please input your password!'),
 					Validator.minLength('#form2Password', 8),
-					Validator.maxLength('#form2Password', 12),
+					Validator.maxLength('#form2Password', 255),
 					Validator.isCorrect('#form2Password', 'Format password is incorrect!'),
 				]
 			});
