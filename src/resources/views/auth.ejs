@@ -197,8 +197,10 @@
 				errorSelector: '.form__message',
 				rules: [
 					Validator.isRequired('#form1Email','Please input email hear!'),
+					Validator.isEmail('#form1Email','Email format is incorrect!'),
 					Validator.isRequired('#form1Password', 'Please input new password!'),
 					Validator.minLength('#form1Password', 8),
+					Validator.maxLength('#form1Password', 12),
 					Validator.isCorrect('#form1Password', 'Format password is incorrect!'),
 					Validator.isRequired('#form1PasswordConfirmation', 'Please input your password!'),
 					Validator.isComfirmed('#form1PasswordConfirmation',function(){
@@ -213,7 +215,11 @@
 				errorSelector: '.form__message',
 				rules: [
 					Validator.isRequired('#form2Email','Please input email hear!'),
+					Validator.isEmail('#form2Email','Email format is incorrect!'),
 					Validator.isRequired('#form2Password', 'Please input your password!'),
+					Validator.minLength('#form2Password', 8),
+					Validator.maxLength('#form2Password', 12),
+					Validator.isCorrect('#form2Password', 'Format password is incorrect!'),
 				]
 			});
 		})
