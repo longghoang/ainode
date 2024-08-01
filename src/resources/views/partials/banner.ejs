@@ -1,5 +1,33 @@
-<div class="danger">
-    <i class="far fa-times-circle shine"></i>
-    &nbsp; &nbsp;
-    <span>This email was exist!</span>
-</div>
+<% if (typeof status === 'string') { %>
+    <link rel="stylesheet" href="/css/banner.css">
+    <% if (status==='conflict') { %>
+    <div class="banner error">
+        <i class="far fa-times-circle shine"></i>This email was exist!
+    </div>
+    <% } %>
+    <% if (status==='fail') { %>
+    <div class="banner error">
+        <i class="far fa-times-circle shine"></i>Account or password is incorrect!
+    </div>
+    <% } %>
+    <% if (status==='update-error') { %>
+    <div class="banner error">
+        <i class="far fa-times-circle shine"></i>Update your information to use this function!
+    </div>
+    <% } %>
+    <% if (status==='register-success') { %>
+    <div class="banner success">
+        <i class="fa-solid fa-check"></i>Register is success! Verify now!
+    </div>
+    <% } %>
+    <% if (status==='verify-success') { %>
+    <div class="banner success">
+        <i class="fa-solid fa-check"></i>Wellcome to Smart Parking App!
+    </div>
+    <% } %>
+    <% if (status==='update-success') { %>
+    <div class="banner success">
+        <i class="fa-solid fa-check"></i>Update successful!
+    </div>
+    <% } %>
+<% } %>

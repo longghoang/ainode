@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="/css/reset.css">
 	<link rel="stylesheet" href="/css/header.css">
 	<link rel="stylesheet" href="/css/auth.css">
-	<link rel="stylesheet" href="/css/banner.css">
 </head>
 <body>
 	<%- include('partials/header')%>
@@ -32,17 +31,17 @@
 					</div>
 					<div class="form__group">
 						<label for="form1Email" class="form__label">Email</label>
-						<input id="form1Email" name="email" type="email" placeholder="VD: email@domain.com" class="form-control">
+						<input id="form1Email" name="email" type="email" placeholder="VD: email@domain.com" class="form-control" value="">
 						<span class="form__message"></span>
 					</div>
 					<div class="form__group">
 						<label for="form1Password" class="form__label">Password</label>
-						<input id="form1Password" name="password" type="password" class="form-control">
+						<input id="form1Password" name="password" type="password" class="form-control" value="">
 						<span class="form__message"></span>
 					</div>
 					<div class="form__group">
 						<label for="form1PasswordConfirmation" class="form__label">Confirm password!</label>
-						<input id="form1PasswordConfirmation" type="password" class="form-control">
+						<input id="form1PasswordConfirmation" type="password" class="form-control" value="">
 						<span class="form__message"></span>
 					</div>
 					<button type="submit">Sign Up</button>
@@ -59,12 +58,12 @@
 					</div>
 					<div class="form__group">
 						<label for="form2Email" class="form__label">Email</label>
-						<input id="form2Email" name="email" type="email" placeholder="VD: email@domain.com" class="form-control">
+						<input id="form2Email" name="email" type="email" placeholder="VD: email@domain.com" class="form-control" value="">
 						<span class="form__message"></span>
 					</div>
 					<div class="form__group">
 						<label for="form2Password" class="form__label">Password</label>
-						<input id="form2Password" name="password" type="password" class="form-control">
+						<input id="form2Password" name="password" type="password" class="form-control" value="">
 						<span class="form__message"></span>
 					</div>
 					<div class="forget">
@@ -90,10 +89,10 @@
 		</div>
 	</div>
 	<form id="redirectRegisterFirebase" action="/auth/register-firebase" method="post" hidden>
-		<input type="hidden" name="email">
+		<input type="hidden" name="email" value="">
 	</form>
 	<form id="redirectLoginFirebase" action="/auth/login-firebase" method="post" hidden>
-		<input type="hidden" name="email">
+		<input type="hidden" name="email" value="">
 	</form>	
 	<script type="module">
 		import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";

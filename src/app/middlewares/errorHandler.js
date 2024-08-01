@@ -13,9 +13,12 @@ const getNewAccessToken = async (refreshToken) => {
 };
 
 module.exports = async function errorHandler (err, req, res, next) {
+    console.log(req.url);
     switch (err.status) {
         case 401:
-            return res.send('401');
+            console.log('Is errorHandle 401');
+            return res.cookie('status', 'fail', { maxAge: 5000 })
+            .redirect('/auth');
         case 403:
             console.log('Is errorHandle 403');
             const uid = req.signedCookies.uid;
@@ -52,6 +55,9 @@ module.exports = async function errorHandler (err, req, res, next) {
                     await axios.post(`${process.env.AUTH_SERVER}/register-employ`, userData);
                     return res.redirect('/');
                 }
+                if(req.url === '/auth/logout') {
+                    return res.redirect('/auth');
+                }
                 return res.render('index');
             } catch (error) {
                 console.log(error);
@@ -60,9 +66,7 @@ module.exports = async function errorHandler (err, req, res, next) {
         case 404:
             return res.send('404');
         case 409:
-            return res.cookie('status', 'conflict', {
-                maxAge: 60000
-            })
+            return res.cookie('status', 'conflict', { maxAge: 5000 })
             .redirect('/auth');
         case 500:
             return res.send('500');

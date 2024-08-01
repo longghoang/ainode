@@ -13,6 +13,7 @@
 </head>
 <body>
     <%- include('partials/header') %>
+    <%- include('partials/banner') %>
     <% if (typeof user!=='undefined') { %>
     <div class="app">
         <div class="container">
@@ -25,8 +26,7 @@
                         </div>
                     </div>
                     <div class="name">
-                        <a href="#"><i class="fa-regular fa-pen-to-square"></i></a>
-                        <span>Le Duc Khuong</span>
+                        <span><%= user.name %></span>
                     </div>
                 </div>
                 <div class="me__right">
@@ -56,8 +56,8 @@
                                 <input type="text" name="add" id="meAddress" class="infor__value" value="<%= user.add %>">
                             </div>
                             <div class="infor__item">
-                                <label class="infor__pro" for="meSdt">Sdt:</label>
-                                <input type="text" name="sdt" id="meSdt" class="infor__value" value="<%= user.sdt %>">
+                                <label class="infor__pro" for="mephoneNum">Phone:</label>
+                                <input type="text" name="phoneNum" id="mephoneNum" class="infor__value" value="<%= user.phoneNum %>">
                             </div>
                         </form>
                     </div>

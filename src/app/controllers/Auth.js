@@ -1,18 +1,41 @@
 const axios = require('axios');
 const createError = require('http-errors');
-var admin = require('../configs/firebase/index.firebase');
 
+const admin = require('../configs/firebase/index.firebase');
 class Auth {
     index (req, res) {
         const status = req.cookies.status;
-        if(status) return res.render('auth', { isAuth: true, status });
-        return res.render('auth', { isAuth: true });
+        return res.render('auth', { isAuth: true, status });
     }
     async register(req, res, next) {
         const userData = req.body;
         if(!userData.email || !userData.password) return res.status(400).json({ message: 'Invalid request data' });
         try {
             const response = await axios.post(`${process.env.AUTH_SERVER}/register`, userData);
+            return res.cookie('status', 'register-success', {maxAge: 5000})
+            .cookie('uid', response.data.uid, { signed: true })
+            .redirect('/auth/verify');
+        } catch (error) {
+            console.log(error);
+            if (error.response) {
+                next(createError(error.response.status, error.response.data.message));
+            } else {
+                next(createError(500, 'Internal server error'));
+            }
+        }
+    }
+
+    verifyIndex (req, res, next) {
+        const status = req.cookies.status;
+        return res.render('verify', { isVerify: true, status });
+    }
+
+    async verify (req, res, next) {
+        const id = req.signedCookies.uid;
+        if (!id) return res.redirect('auth');
+        try {
+            const data = { uid: id, code: req.body.code };
+            const response = await axios.post(`${process.env.AUTH_SERVER}/verify`, data);
             const {uid, accessToken} = response.data;
             const cookieOptions = {
                 signed: true,
@@ -20,8 +43,10 @@ class Auth {
             };
             return res.cookie('act', accessToken, cookieOptions)
             .cookie('uid', uid, cookieOptions)
+            .cookie('status', 'verify-success', {maxAge: 5000})
             .redirect('/');
         } catch (error) {
+            console.log(error);
             if (error.response) {
                 next(createError(error.response.status, error.response.data.message));
             } else {

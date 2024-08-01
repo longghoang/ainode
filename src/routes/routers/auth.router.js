@@ -9,5 +9,7 @@ router.post('/register-firebase', authController.firebaseRegister);
 router.post('/login-firebase', authController.firebaseLogin);
 router.post('/login', authController.login);
 router.get('/logout', authController.logout);
+router.get('/verify', authController.verifyIndex);
+router.post('/verify', authController.verify);
 
 module.exports = router;

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Gửi Xe Thông Minh</title>
+    <link rel="shortcut icon" href="/logos/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/form.css">
+    <link rel="stylesheet" href="/css/verify.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+    <div class="container">
+        <%- include('partials/banner')%>
+        <div class="form__container">
+            <h1>Verify Code</h1>
+            <form action="/auth/verify" method="POST">
+                <div class="form__group">
+                    <label for="code">Code 6 digits</label>
+                    <input type="text" id="code" name="code" class="form__controll" required>
+                </div>
+                <div class="form__group">
+                    <input type="submit" value="Verify" class="form__controll" style="background-color: #2d7df5;">
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
