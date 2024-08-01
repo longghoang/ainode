@@ -17,7 +17,7 @@ module.exports = async function errorHandler (err, req, res, next) {
     switch (err.status) {
         case 401:
             console.log('Is errorHandle 401');
-            return res.cookie('status', 'fail', { maxAge: 5000 })
+            return res.cookie('status', 'fail', { maxAge: 2000 })
             .redirect('/auth');
         case 403:
             console.log('Is errorHandle 403');
@@ -66,7 +66,7 @@ module.exports = async function errorHandler (err, req, res, next) {
         case 404:
             return res.send('404');
         case 409:
-            return res.cookie('status', 'conflict', { maxAge: 5000 })
+            return res.cookie('status', 'conflict', { maxAge: 2000 })
             .redirect('/auth');
         case 500:
             return res.send('500');

@@ -27,7 +27,7 @@ class Me {
         if(!userData.email || !uid) return res.status(400).json({ message: 'Invalid request data' });
         try {
             await axios.patch(`${process.env.AUTH_SERVER}/update-info`, userData);
-            return res.cookie('status', 'update-success', {maxAge: 5000})
+            return res.cookie('status', 'update-success', {maxAge: 2000})
             .redirect('/me');
         } catch (error) {
             console.log(error);

@@ -12,7 +12,7 @@ class Auth {
         if(!userData.email || !userData.password) return res.status(400).json({ message: 'Invalid request data' });
         try {
             const response = await axios.post(`${process.env.AUTH_SERVER}/register`, userData);
-            return res.cookie('status', 'register-success', {maxAge: 5000})
+            return res.cookie('status', 'register-success', {maxAge: 2000})
             .cookie('uid', response.data.uid, { signed: true })
             .redirect('/auth/verify');
         } catch (error) {
@@ -43,7 +43,7 @@ class Auth {
             };
             return res.cookie('act', accessToken, cookieOptions)
             .cookie('uid', uid, cookieOptions)
-            .cookie('status', 'verify-success', {maxAge: 5000})
+            .cookie('status', 'verify-success', {maxAge: 2000})
             .redirect('/');
         } catch (error) {
             console.log(error);
