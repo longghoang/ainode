@@ -32,7 +32,7 @@
 					</div>
 					<div class="form__group">
 						<label for="form1Email" class="form__label">Email</label>
-						<input id="form1Email" name="email" type="text" placeholder="VD: email@domain.com" class="form-control">
+						<input id="form1Email" name="email" type="email" placeholder="VD: email@domain.com" class="form-control">
 						<span class="form__message"></span>
 					</div>
 					<div class="form__group">
@@ -59,7 +59,7 @@
 					</div>
 					<div class="form__group">
 						<label for="form2Email" class="form__label">Email</label>
-						<input id="form2Email" name="email" type="text" placeholder="VD: email@domain.com" class="form-control">
+						<input id="form2Email" name="email" type="email" placeholder="VD: email@domain.com" class="form-control">
 						<span class="form__message"></span>
 					</div>
 					<div class="form__group">
@@ -68,7 +68,7 @@
 						<span class="form__message"></span>
 					</div>
 					<div class="forget">
-						<a href="#">Forget Your Password?</a>
+						<a href="/forgotpw">Forgot Your Password?</a>
 					</div>
 					<button type="submit">Sign In</button>
 				</form>
@@ -130,7 +130,7 @@
 		async function signin(auth, provider, formRedirect) {
 			try {
 				const user = await signInWithPopup(auth, provider);
-				if(!user) window.location.replace("http://127.0.0.1:3000/auth");
+				if(!user) window.location.replace("http://127.0.0.1:3001/auth");
 				const email = user.email;
 				formRedirect.querySelector('input').value = email;
 				formRedirect.submit();

@@ -11,19 +11,24 @@
     <% if (typeof isAuth==='undefined' && typeof isMe==='undefined' && typeof isHelp==='undefined' && typeof isEmploy==='undefined' && typeof isTicket==='undefined' && typeof isTicket==='undefined' && typeof isTicket==='undefined') { %>
     <div class="header__ele header__right">
         <nav class="header__funcs">
-            <% if (typeof user!=='undefined' && user.level > 10) { %>
+            <% if (typeof user!=='undefined' && user.level > 0) { %>
             <li class="header__func wrapper__subfuncs" style="cursor: default; position: relative;"><div class="header__link">
                 <i class="fa-solid fa-chevron-down"></i>Managements</div>
                 <ul class="header__subfuncs">
-                    <li class="header__subfunc"><a href="/captureface" class="header__link">Vehicle identification</a></li>
-                    <li class="header__subfunc"><a href="#" class="header__link">Ticket management</a></li>
+                    <li class="header__subfunc"><a href="/scan" class="header__link">Vehicle identification</a></li>
+                    <li class="header__subfunc"><a href="/revenue" class="header__link">Revenue management</a></li>
                     <li class="header__subfunc"><a href="#" class="header__link">Report statistics</a></li>
                 </ul>
             </li>
             <% } %>
-            <li class="header__func"><a href="/ticket" class="header__link">
-                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" x="0" y="0" viewBox="0 0 128 128" style="enable-background:new 0 0 512 512; vertical-align: top; margin-right: 2px; margin-right: 8px;" xml:space="preserve" class=""><g><path d="M121.5 64c1 0 1.7-.8 1.8-1.7V40.5c0-1-.8-1.7-1.8-1.8h-4.8l-2.1-14.3c-.1-1-1-1.6-2-1.5l-27.1 4h-.1L6.2 38.8s-1.5.3-1.5 1.7v21.7c0 1 .8 1.7 1.7 1.8 4.4 0 7.9 3.5 7.9 7.9s-3.5 7.9-7.9 7.9c-1 0-1.7.8-1.8 1.7v21.7c0 1 .8 1.7 1.8 1.8h115c1 0 1.7-.8 1.8-1.8V81.6c0-1-.8-1.7-1.7-1.8-4.4 0-7.9-3.5-7.9-7.9s3.5-7.9 7.9-7.9zM84.2 30.7l.7 4.7c.1.9.9 1.5 1.7 1.5h.3c1-.1 1.6-1 1.5-2l-.7-4.7 23.7-3.5 1.8 12.1H30.1zm35.6 52.5v18.4H93.9v-4.8c0-1-.8-1.8-1.8-1.8s-1.8.8-1.8 1.8v4.8h-82V83.2c6.2-1 10.5-6.8 9.5-13-.8-4.9-4.6-8.8-9.5-9.5V42.3h82.1V47c0 1 .8 1.8 1.8 1.8S94 48 94 47v-4.8h25.9v18.4c-6.2 1-10.5 6.8-9.5 13 .6 5 4.4 8.8 9.4 9.6z" fill="#fff" opacity="1" data-original="#000000" class=""></path><path d="M92.1 74.6c-1 0-1.7.8-1.8 1.7v11.6c0 1 .8 1.8 1.8 1.8s1.8-.8 1.8-1.8V76.4c0-1-.8-1.8-1.8-1.8zM92.1 54.2c-1 0-1.7.8-1.8 1.7v11.6c0 1 .8 1.8 1.8 1.8s1.8-.8 1.8-1.8V55.9c0-.9-.8-1.7-1.8-1.7zM27.3 57H49c1 0 1.8-.8 1.8-1.8s-.8-1.7-1.8-1.7H27.3c-1 0-1.8.8-1.8 1.8s.8 1.7 1.8 1.7zM70.7 64.6H27.3c-1 0-1.8.8-1.8 1.8s.8 1.8 1.8 1.8h43.4c1 0 1.8-.8 1.8-1.8s-.8-1.8-1.8-1.8zM70.7 75.7H27.3c-1 0-1.8.8-1.8 1.8s.8 1.8 1.8 1.8h43.4c1 0 1.8-.8 1.8-1.8s-.8-1.8-1.8-1.8zM70.7 86.8H27.3c-1 0-1.8.8-1.8 1.8s.8 1.8 1.8 1.8h43.4c1 0 1.8-.8 1.8-1.8s-.8-1.8-1.8-1.8z" fill="#fff" opacity="1" data-original="#000000" class=""></path></g></svg>
-                Monthly Ticket</a>
+            
+            <li class="header__func wrapper__subfuncs" style="cursor: default; position: relative;"><div class="header__link">
+                <i class="fa-solid fa-chevron-down"></i>Monthly ticket</div>
+                <ul class="header__subfuncs">
+                    <li class="header__subfunc"><a href="/ticket" class="header__link">Ticket registration</a></li>
+                    <li class="header__subfunc"><a href="/ticket/managment" class="header__link">Ticket management</a></li>
+                    <li class="header__subfunc"><a href="#" class="header__link">Empty parking space</a></li>
+                </ul>
             </li>
             <% if (typeof user!=='undefined' && user.level === 0) { %>
             <li class="header__func"><a href="/employ" class="header__link">

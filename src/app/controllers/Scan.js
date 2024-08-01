@@ -6,17 +6,9 @@ const { Canvas, Image, ImageData } = require('canvas');
 faceapi.env.monkeyPatch({ Canvas, Image, ImageData });
 
 class Scan {
-   
-
-    // captureface
-    async captureface (req, res, next) {
-        try {
-            res.render('captureface')
-        } catch (error) {
-           next(error)
-        }
+    captureface (req, res) {
+        res.render('captureface')
     }
-
 
     /// scan
     async scan (req, res, next) {

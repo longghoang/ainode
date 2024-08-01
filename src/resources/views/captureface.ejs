@@ -143,7 +143,7 @@
                 }
 
                 // Gửi dữ liệu đến server để lưu trữ
-                fetch('/scan', {
+                fetch('/scan/scanCar', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -180,7 +180,7 @@
                 const licensePlate = document.getElementById('licensePlate').value;
 
                 // Gửi dữ liệu đến server để so sánh
-                fetch('/compare', {
+                fetch('/scan/compare', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

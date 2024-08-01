@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Gửi Xe Thông Minh</title>
+    <link rel="shortcut icon" href="/logos/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/capture.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .app {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        .error-message {
+            color: red;
+             font-size: 14px;
+             margin-top: 10px;
+}
+
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .form__group {
+            margin-bottom: 15px;
+        }
+        .form__group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form__group input[type="email"], .form__group input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button[type="button"], button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        button[type="button"]:hover, button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .btn-secondary {
+            background-color: #ccc;
+            color: black;
+        }
+        .back-button {
+            margin-top: 10px;
+            width: 100%;
+            padding: 10px;
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        .back-button:hover {
+            background-color: #5a6268;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+    <%- include('partials/header') %>
+    <div class="app">
+        <div class="container">
+            <!-- Step 1: Enter Email -->
+            <form id="emailForm" action="/forgotpw/sendcode" method="post">
+                <h1>Reset Password</h1>
+                <div class="form__group">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" required>
+                </div>
+                <button type="button" id="nextButton">Next</button>
+                <!-- Thêm phần tử thông báo lỗi -->
+                <div id="error-message" class="error-message" style="display: none;"></div>
+            </form>
+            
+
+            <!-- Step 2: Confirm Email and Send Code -->
+            <div id="confirmationDiv" style="display: none;">
+                <h1>Send verification code</h1>
+                <button type="button" id="sendCodeButton">Send code</button>
+                <button type="button" class="back-button" onclick="goBack()">Back</button>
+            </div>
+
+            <!-- Step 3: Enter Verification Code -->
+            <form id="codeForm" method="POST" action="/forgotpw/verifycode" style="display: none;">
+                <h1>Enter the verification code</h1>
+                <div class="form__group">
+                    <label for="code">Enter Code</label>
+                    <input type="text" name="code" id="code" required>
+                </div>
+                <button type="submit">Verify</button>
+                <button type="button" class="back-button" onclick="goBack()">Back</button>
+            </form>
+        </div>
+    </div>
+    <%- include('partials/footer') %>
+
+    <script>
+       document.getElementById('nextButton').addEventListener('click', function() {
+    var emailInput = document.getElementById('email');
+    var errorMessage = document.getElementById('error-message');
+
+    if (emailInput.checkValidity()) {
+        // Nếu email hợp lệ, chuyển sang bước xác nhận
+        document.getElementById('emailForm').style.display = 'none';
+        document.getElementById('confirmationDiv').style.display = 'block';
+        errorMessage.style.display = 'none'; // Ẩn thông báo lỗi
+    } else {
+        // Nếu email không hợp lệ, hiển thị thông báo lỗi
+        errorMessage.textContent = 'Vui lòng nhập email hợp lệ !!';
+        errorMessage.style.display = 'block'; // Hiển thị thông báo lỗi
+    }
+});
+
+        document.getElementById('sendCodeButton').addEventListener('click', function() {
+            var email = document.getElementById('email').value;
+            $.ajax({
+                type: 'POST',
+                url: '/forgotpw/sendcode',
+                data: { email: email },
+                success: function(response) {
+                    // Xử lý khi gửi mã thành công
+                    document.getElementById('confirmationDiv').style.display = 'none';
+                    document.getElementById('codeForm').style.display = 'block';
+                },
+                error: function(xhr, status, error) {
+                    // Xử lý lỗi nếu có
+                    alert('Đã xảy ra lỗi khi gửi mã. Vui lòng thử lại.');
+                }
+            });
+        });
+
+        function goBack() {
+            document.getElementById('emailForm').style.display = 'block';
+            document.getElementById('confirmationDiv').style.display = 'none';
+            document.getElementById('codeForm').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

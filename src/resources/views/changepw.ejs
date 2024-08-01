@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thay Đổi Mật Khẩu</title>
+    <link rel="shortcut icon" href="/logos/logo.png" type="image/x-icon">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .app {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <div class="container">
+            <h1>Thay Đổi Mật Khẩu</h1>
+            <form method="POST" action="/forgotpw/savepw">
+                <div class="form-group">
+                    <label for="inputEmail">Email</label>
+                    <input type="email" name="email" id="inputEmail" placeholder="Nhập email..." required>
+                </div>
+                <div class="form-group">
+                    <label for="inputNewPassword">Mật khẩu mới</label>
+                    <input type="password" name="newpass" id="inputNewPassword" placeholder="Nhập mật khẩu mới..." required>
+                </div>
+                <div class="form-group">
+                    <label for="inputVerifyPassword">Xác nhận mật khẩu</label>
+                    <input type="password" name="verifypass" id="inputVerifyPassword" placeholder="Nhập mật khẩu xác nhận..." required>
+                </div>
+                <button type="submit">Xác nhận</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
