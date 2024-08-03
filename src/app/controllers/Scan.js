@@ -18,7 +18,8 @@ class Scan {
       
             res.render('captureface', {
               totalPosts: totalPosts,
-              post: post
+              post: post,
+              isScan: true
             })
         } catch(error) {
             next(error)
