@@ -1,5 +1,5 @@
 const axios = require('axios');
-const errorFlow = require('../utils/errorFlow.util');
+const createError = require('http-errors');
 
 const admin = require('../configs/firebase/index.firebase');
 class Auth {
@@ -17,7 +17,12 @@ class Auth {
             .cookie('exp', response.data.expires, {maxAge: 120000})
             .redirect('/auth/verify');
         } catch (error) {
-            errorFlow(error, next);
+            if (error.response) {
+                next(createError(error.response.status, error.response.data.message));
+            } else {
+                console.log('Error!');
+                next(createError(500, 'Internal server error'));
+            }
         }
     }
 
@@ -44,7 +49,12 @@ class Auth {
             .cookie('status', 'verify-success', {maxAge: 2000})
             .redirect('/');
         } catch (error) {
-            errorFlow(error, next);
+            if (error.response) {
+                next(createError(error.response.status, error.response.data.message));
+            } else {
+                console.log('Error!');
+                next(createError(500, 'Internal server error'));
+            }
         }
     }
 
@@ -57,7 +67,12 @@ class Auth {
             .cookie('exp', response.data.expires, {maxAge: 120000})
             .redirect('/auth/verify');
         } catch (error) {
-            errorFlow(error, next);
+            if (error.response) {
+                next(createError(error.response.status, error.response.data.message));
+            } else {
+                console.log('Error!');
+                next(createError(500, 'Internal server error'));
+            }
         }
     }
 
@@ -79,7 +94,12 @@ class Auth {
             .cookie('uid', uid, cookieOptions)
             .redirect('/');
         } catch (error) {
-            errorFlow(error, next);
+            if (error.response) {
+                next(createError(error.response.status, error.response.data.message));
+            } else {
+                console.log('Error!');
+                next(createError(500, 'Internal server error'));
+            }
         }
     }
 
@@ -100,7 +120,12 @@ class Auth {
             .redirect('/');
                        
         } catch (error) {
-            errorFlow(error, next);
+            if (error.response) {
+                next(createError(error.response.status, error.response.data.message));
+            } else {
+                console.log('Error!');
+                next(createError(500, 'Internal server error'));
+            }
 
         }
     }
@@ -116,7 +141,12 @@ class Auth {
             .cookie('uid', uid, cookieOptions)
             .redirect('/');
         } catch (error) {
-            errorFlow(error, next);
+            if (error.response) {
+                next(createError(error.response.status, error.response.data.message));
+            } else {
+                console.log('Error!');
+                next(createError(500, 'Internal server error'));
+            }
 
         }
     }
@@ -129,7 +159,12 @@ class Auth {
             res.clearCookie('uid');
             return res.redirect('/auth');
         } catch (error) {
-            errorFlow(error, next);
+            if (error.response) {
+                next(createError(error.response.status, error.response.data.message));
+            } else {
+                console.log('Error!');
+                next(createError(500, 'Internal server error'));
+            }
         }
     }
 }
