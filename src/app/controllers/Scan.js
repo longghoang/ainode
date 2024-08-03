@@ -6,8 +6,23 @@ const { Canvas, Image, ImageData } = require('canvas');
 faceapi.env.monkeyPatch({ Canvas, Image, ImageData });
 
 class Scan {
-    captureface (req, res) {
-        res.render('captureface', {isScan: true})
+    async captureface (req, res) {
+        try {
+            const totalPosts = await faceSchema.countDocuments({ scannedSuccessfully: true });
+            console.log(totalPosts)
+      
+            let post;
+          if (totalPosts === 0) {
+            post = 'Chưa có xe nào được gửi';
+          }
+      
+            res.render('captureface', {
+              totalPosts: totalPosts,
+              post: post
+            })
+        } catch(error) {
+            next(error)
+        }
     }
 
     /// scan
@@ -79,9 +94,13 @@ class Scan {
                     await storedFace.save();
                 }
             }
+
+            ///
+            
     
-            // Trả về kết quả
+            
             res.status(200).json({ results });
+            
         } catch (error) {
             next(error);
         }
