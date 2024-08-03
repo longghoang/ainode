@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/me.css">
+    <link rel="stylesheet" href="/css/reset.css">
 </head>
 
 <style>
@@ -107,13 +110,14 @@
     }
 </style>
 <body>
+    <%- include('partials/header') %>
     <div class="container">
         <div class="content">
             <div class="profile-card">
-                <h1>Profile</h1>
+                <h1>Parking Spot Overview</h1>
                 <form>
                     <div class="mb-3">
-                        <label for="postCount" class="form-label">Vị trí đỗ xe đã gửi trong bãi: <%= totalPosts %>/100</label>
+                        <label for="postCount" class="form-label">Parking spots currently occupied: <%= totalPosts %>/100</label>
                     </div>
                 </form>
                 <button class="btn-refresh" onclick="location.reload();">Refresh</button>
