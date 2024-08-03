@@ -16,9 +16,7 @@
 		<video class="video" autoplay muted loop>
 			<source src="/videos/sea2s.mp4" type="video/mp4">
 		</video>
-		<% if (typeof status === 'string') { %>
-			<%- include('partials/banner')%>
-		<% } %>
+		<%- include('partials/banner')%>
 		<div class="container" id="container">
 			<div class="form__container sign__up">
 				<form action="/auth/register" method="post" id="form1">
@@ -31,7 +29,7 @@
 					</div>
 					<div class="form__group">
 						<label for="form1Email" class="form__label">Email</label>
-						<input id="form1Email" name="email" type="email" placeholder="VD: email@domain.com" class="form-control" value="">
+						<input id="form1Email" name="email" type="text" placeholder="VD: email@domain.com" class="form-control" value="">
 						<span class="form__message"></span>
 					</div>
 					<div class="form__group">
@@ -58,7 +56,7 @@
 					</div>
 					<div class="form__group">
 						<label for="form2Email" class="form__label">Email</label>
-						<input id="form2Email" name="email" type="email" placeholder="VD: email@domain.com" class="form-control" value="">
+						<input id="form2Email" name="email" type="text" placeholder="VD: email@domain.com" class="form-control" value="">
 						<span class="form__message"></span>
 					</div>
 					<div class="form__group">
@@ -89,10 +87,10 @@
 		</div>
 	</div>
 	<form id="redirectRegisterFirebase" action="/auth/register-firebase" method="post" hidden>
-		<input type="hidden" name="email" value="">
+		<input type="hidden" name="email">
 	</form>
 	<form id="redirectLoginFirebase" action="/auth/login-firebase" method="post" hidden>
-		<input type="hidden" name="email" value="">
+		<input type="hidden" name="email">
 	</form>	
 	<script type="module">
 		import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
@@ -129,17 +127,22 @@
 		async function signin(auth, provider, formRedirect) {
 			try {
 				const user = await signInWithPopup(auth, provider);
-				if(!user) window.location.replace("https://ainode.onrender.com/auth");
+				if(!user) window.location.replace("http://127.0.0.1:3000/auth");
 				const email = user.email;
+				console.log('Is try');
+				console.log(user);
 				formRedirect.querySelector('input').value = email;
 				formRedirect.submit();
 			} catch (error) {
 				if (error.code === 'auth/account-exists-with-different-credential') {
+					console.log('Is catch');
+					console.log(error.customData);
 					const email = error.customData.email;
 					formRedirect.querySelector('input').value = email;
 					formRedirect.submit();
 				}
 				else {
+					console.log('Is error');
 					console.error("Lỗi đăng nhập:", error);
 				}
 			}
