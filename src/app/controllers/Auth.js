@@ -107,19 +107,17 @@ class Auth {
 
     async login(req, res, next) {
         const userData = req.body;
-        return res.json(userData);
-        // if(!userData.email || !userData.password) return res.status(400).json({ message: 'Invalid request data' });
-        // try {
-        //     const response = await axios.post(`${process.env.AUTH_SERVER}/login`, userData);
-        //     const {uid, accessToken} = response.data;
-        //     const cookieOptions = { signed: true, maxAge: 3600000 };
-        //     return res.cookie('act', accessToken, cookieOptions)
-        //     .cookie('uid', uid, cookieOptions)
-        //     .redirect('/');
-        // } catch (error) {
-        //     errorFlow(error, next);
-
-        // }
+        if(!userData.email || !userData.password) return res.status(400).json({ message: 'Invalid request data' });
+        try {
+            const response = await axios.post(`${process.env.AUTH_SERVER}/login`, userData);
+            const {uid, accessToken} = response.data;
+            const cookieOptions = { signed: true, maxAge: 3600000 };
+            return res.cookie('act', accessToken, cookieOptions)
+            .cookie('uid', uid, cookieOptions)
+            .redirect('/');
+        } catch (error) {
+            errorFlow(error, next);
+        }
     }
     async logout(req, res, next) {
         const act = req.signedCookies.act;
