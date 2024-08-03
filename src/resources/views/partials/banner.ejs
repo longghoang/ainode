@@ -25,6 +25,21 @@
         <i class="fa-solid fa-check"></i>Wellcome to Smart Parking App!
     </div>
     <% } %>
+    <% if (status==='verify-error') { %>
+    <div class="banner error">
+        <i class="far fa-times-circle shine"></i>Verification failed!
+    </div>
+    <% } %>
+    <% if (status==='verify-warning') { %>
+    <div class="banner warning">
+        <i class="fa-solid fa-triangle-exclamation"></i>You has not verified!
+    </div>
+    <% } %>
+    <% if (status==='getcode-success') { %>
+    <div class="banner success">
+        <i class="fa-solid fa-check"></i>Get a new code successful!
+    </div>
+    <% } %>
     <% if (status==='update-success') { %>
     <div class="banner success">
         <i class="fa-solid fa-check"></i>Update successful!

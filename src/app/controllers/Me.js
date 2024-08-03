@@ -1,5 +1,5 @@
 const axios = require('axios');
-const createError = require('http-errors');
+const errorFlow = require('../utils/errorFlow.util');
 
 class Me {
     async index (req, res, next) {
@@ -13,11 +13,7 @@ class Me {
             const user = response.data; 
             return res.render('me', { isMe: true, user, status });
         } catch (error) {
-            if (error.response) {
-                next(createError(error.response.status, error.response.data.message));
-            } else {
-                next(createError(500, 'Internal server error'));
-            }
+            errorFlow(error, next);
         }
     }
     async update (req, res, next) {
@@ -30,8 +26,7 @@ class Me {
             return res.cookie('status', 'update-success', {maxAge: 2000})
             .redirect('/me');
         } catch (error) {
-            console.log(error);
-            return res.send('Error');
+            errorFlow(error, next);
         }
     }
 }

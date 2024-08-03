@@ -1,5 +1,5 @@
 const axios = require('axios');
-const createError = require('http-errors');
+const errorFlow = require('../utils/errorFlow.util');
 
 const admin = require('../configs/firebase/index.firebase');
 class Auth {
@@ -14,20 +14,21 @@ class Auth {
             const response = await axios.post(`${process.env.AUTH_SERVER}/register`, userData);
             return res.cookie('status', 'register-success', {maxAge: 2000})
             .cookie('uid', response.data.uid, { signed: true })
+            .cookie('exp', response.data.expires, {maxAge: 120000})
             .redirect('/auth/verify');
         } catch (error) {
-            console.log(error);
-            if (error.response) {
-                next(createError(error.response.status, error.response.data.message));
-            } else {
-                next(createError(500, 'Internal server error'));
-            }
+            errorFlow(error, next);
         }
     }
 
     verifyIndex (req, res, next) {
         const status = req.cookies.status;
-        return res.render('verify', { isVerify: true, status });
+        const exp = new Date(req.cookies.exp);
+        if(!exp || exp == 'Invalid Date') return res.render('verify', { isVerify: true, status });
+        const currentTime = new Date();
+        const timeDifference = exp - currentTime;
+        const time = Math.floor(timeDifference / 1000);
+        return res.render('verify', { isVerify: true, status, time });
     }
 
     async verify (req, res, next) {
@@ -37,21 +38,26 @@ class Auth {
             const data = { uid: id, code: req.body.code };
             const response = await axios.post(`${process.env.AUTH_SERVER}/verify`, data);
             const {uid, accessToken} = response.data;
-            const cookieOptions = {
-                signed: true,
-                maxAge: 3600000
-            };
+            const cookieOptions = { signed: true, maxAge: 3600000 };
             return res.cookie('act', accessToken, cookieOptions)
             .cookie('uid', uid, cookieOptions)
             .cookie('status', 'verify-success', {maxAge: 2000})
             .redirect('/');
         } catch (error) {
-            console.log(error);
-            if (error.response) {
-                next(createError(error.response.status, error.response.data.message));
-            } else {
-                next(createError(500, 'Internal server error'));
-            }
+            errorFlow(error, next);
+        }
+    }
+
+    async getcode (req, res, next) {
+        const id = req.signedCookies.uid;
+        if (!id) return res.redirect('auth');
+        try {
+            const response = await axios.post(`${process.env.AUTH_SERVER}/getcode`, { id });
+            return res.cookie('status', 'getcode-success', {maxAge: 2000})
+            .cookie('exp', response.data.expires, {maxAge: 120000})
+            .redirect('/auth/verify');
+        } catch (error) {
+            errorFlow(error, next);
         }
     }
 
@@ -68,20 +74,12 @@ class Auth {
             }
             const response = await axios.post(`${process.env.AUTH_SERVER}/register-firebase`, userData);
             const {uid, accessToken} = response.data;
-            const cookieOptions = {
-                signed: true,
-                maxAge: 3600000
-            };
+            const cookieOptions = { signed: true, maxAge: 3600000 };
             return res.cookie('act', accessToken, cookieOptions)
             .cookie('uid', uid, cookieOptions)
             .redirect('/');
-                       
         } catch (error) {
-            if (error.response) {
-                next(createError(error.response.status, error.response.data.message));
-            } else {
-                next(createError(500, 'Internal server error'));
-            }
+            errorFlow(error, next);
         }
     }
 
@@ -96,20 +94,14 @@ class Auth {
             }
             const response = await axios.post(`${process.env.AUTH_SERVER}/login-firebase`, userData);
             const {uid, accessToken} = response.data;
-            const cookieOptions = {
-                signed: true,
-                maxAge: 3600000
-            };
+            const cookieOptions = { signed: true, maxAge: 3600000 };
             return res.cookie('act', accessToken, cookieOptions)
             .cookie('uid', uid, cookieOptions)
             .redirect('/');
                        
         } catch (error) {
-            if (error.response) {
-                next(createError(error.response.status, error.response.data.message));
-            } else {
-                next(createError(500, 'Internal server error'));
-            }
+            errorFlow(error, next);
+
         }
     }
 
@@ -119,19 +111,13 @@ class Auth {
         try {
             const response = await axios.post(`${process.env.AUTH_SERVER}/login`, userData);
             const {uid, accessToken} = response.data;
-            const cookieOptions = {
-                signed: true,
-                maxAge: 3600000
-            };
+            const cookieOptions = { signed: true, maxAge: 3600000 };
             return res.cookie('act', accessToken, cookieOptions)
             .cookie('uid', uid, cookieOptions)
             .redirect('/');
         } catch (error) {
-            if (error.response) {
-                next(createError(error.response.status, error.response.data.message));
-            } else {
-                next(createError(500, 'Internal server error'));
-            }
+            errorFlow(error, next);
+
         }
     }
     async logout(req, res, next) {
@@ -139,15 +125,11 @@ class Auth {
         if(!act) res.redirect('/auth');  
         try {
             await axios.delete(`${process.env.AUTH_SERVER}/logout`, { headers: { 'Authorization': `Bearer ${act}` } })
-            return res.clearCookie('act')
-            .clearCookie('uid')
-            .redirect('/auth');
+            res.clearCookie('act');
+            res.clearCookie('uid');
+            return res.redirect('/auth');
         } catch (error) {
-            if (error.response) {
-                next(createError(error.response.status, error.response.data.message));
-            } else {
-                next(createError(500, 'Internal server error'));
-            }
+            errorFlow(error, next);
         }
     }
 }
