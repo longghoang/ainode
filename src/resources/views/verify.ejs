@@ -16,17 +16,42 @@
     <div class="container">
         <%- include('partials/banner')%>
         <div class="form__container">
-            <h1>Verify Code</h1>
-            <form action="/auth/verify" method="POST">
+            <div class="countdown__container" style="display: flex; justify-content: space-between; align-items: center; font-size: 2rem; font-weight: 600;">
+                Time:
+                <%- include('partials/countdown')%>
+            </div>
+            <h1 style="margin-top: 12px;">Verify Code</h1>
+            <form action="/auth/verify" method="POST" id="form1">
                 <div class="form__group">
                     <label for="code">Code 6 digits</label>
-                    <input type="text" id="code" name="code" class="form__controll" required>
+                    <input type="text" id="code" name="code" class="form__controll">
+                    <span class="form__message"></span>
                 </div>
                 <div class="form__group">
-                    <input type="submit" value="Verify" class="form__controll" style="background-color: #2d7df5;">
+                    <input type="submit" value="Verify" class="form__controll" style="background-color: #2d7df5;" value="">
+                </div>
+            </form>
+            <form action="/auth/getcode" method="GET">
+                <div class="form__group">
+                    <input type="submit" value="Get a new code" class="form__controll" style="background-color: #2d7df5;">
                 </div>
             </form>
         </div>
     </div>
+	<script defer src="/js/validation.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+			Validator({
+				form: '#form1',
+				formGroupSelector: '.form__group',
+				errorSelector: '.form__message',
+				rules: [
+					Validator.isRequired('#code','Please input code hear!'),
+					Validator.minLength('#code', 6, "Code 6 digits"),
+					Validator.maxLength('#code', 6, "Code 6 digits")
+				]
+			});
+        });
+    </script>
 </body>
 </html>
