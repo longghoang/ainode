@@ -107,7 +107,7 @@ class Auth {
 
     async login(req, res, next) {
         const userData = req.body;
-        return res.send(userData);
+        return res.json(userData);
         // if(!userData.email || !userData.password) return res.status(400).json({ message: 'Invalid request data' });
         // try {
         //     const response = await axios.post(`${process.env.AUTH_SERVER}/login`, userData);
