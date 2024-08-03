@@ -2,6 +2,8 @@ const createError = require('http-errors');
 
 module.exports = function errorFlow(error, next) {
     console.log(123)
+    console.log(error.response)
+
     if (error.response) {
         next(createError(error.response.status, error.response.data.message));
     } else {
