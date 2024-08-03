@@ -30,34 +30,34 @@
                     </div>
                 </div>
                 <div class="me__right">
-                    <a href="#" id="updateInfor">
+                    <a href="#" id="updateInfo">
                         <i class="fa-regular fa-pen-to-square"></i>
                         Update
                     </a>
-                    <div class="infor__cover">
-                        <div class="infor">
-                            Information
+                    <div class="info__cover">
+                        <div class="info">
+                            Infomation
                         </div>
-                        <form action="/me/update" class="infor__form" method="post">
-                            <div class="infor__item">
-                                <label class="infor__pro" for="meName">Name:</label>
-                                <input type="text" name="name" id="meName" class="infor__value" value="<%= user.name %>">
+                        <form action="/me/update" class="info__form" method="post">
+                            <div class="info__item">
+                                <label class="info__pro" for="meName">Name:</label>
+                                <input type="text" name="name" id="meName" class="info__value" value="<%= user.name %>">
                             </div>
-                            <div class="infor__item">
-                                <label class="infor__pro" for="meEmail">Email:</label>
-                                <input type="text" name="email" id="meEmail" class="infor__value" value="<%= user.email %>">
+                            <div class="info__item">
+                                <label class="info__pro" for="meEmail">Email:</label>
+                                <input type="text" name="email" id="meEmail" class="info__value" value="<%= user.email %>">
                             </div>
-                            <div class="infor__item">
-                                <label class="infor__pro" for="meBirthday">Birthday:</label>
-                                <input type="text" name="birth" id="meBirthday" class="infor__value" value="<%= user.birth %>">
+                            <div class="info__item">
+                                <label class="info__pro" for="meBirthday">Birthday:</label>
+                                <input type="date" name="birth" id="meBirthday" class="info__value" value="2002-06-16">
                             </div>
-                            <div class="infor__item">
-                                <label class="infor__pro" for="meAddress">Address:</label>
-                                <input type="text" name="add" id="meAddress" class="infor__value" value="<%= user.add %>">
+                            <div class="info__item">
+                                <label class="info__pro" for="meAddress">Address:</label>
+                                <input type="text" name="add" id="meAddress" class="info__value" value="<%= user.add %>">
                             </div>
-                            <div class="infor__item">
-                                <label class="infor__pro" for="mephoneNum">Phone:</label>
-                                <input type="text" name="phoneNum" id="mephoneNum" class="infor__value" value="<%= user.phoneNum %>">
+                            <div class="info__item">
+                                <label class="info__pro" for="mephoneNum">Phone:</label>
+                                <input type="text" name="phoneNum" id="mephoneNum" class="info__value" value="<%= user.phoneNum %>">
                             </div>
                         </form>
                     </div>
@@ -69,8 +69,8 @@
     <%- include('partials/footer') %>
     <script>
         $(document).ready(() => {
-            $('#updateInfor').click(() => {
-                $('.infor__form').submit();
+            $('#updateInfo').click(() => {
+                $('.info__form').submit();
             });
         });
     </script>
