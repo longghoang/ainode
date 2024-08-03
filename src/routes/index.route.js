@@ -7,6 +7,7 @@ const ticket = require('./routers/ticket.router');
 const scan = require('./routers/scan.router');
 const revenue = require('./routers/revenue.router');
 const forgotpw = require('./routers/forgotpw.router');
+const empty = require('./routers/empty.router');
 
 const errorHandler = require('../app/middlewares/errorHandler');
 
@@ -20,6 +21,7 @@ function route(app) {
     app.use('/scan', scan);
     app.use('/revenue', revenue);
     app.use('/forgotpw', forgotpw);
+    app.use('/empty-spots', empty);
     app.use(errorHandler);
 }
 
