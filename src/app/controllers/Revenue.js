@@ -47,7 +47,8 @@ class storedController {
     
             res.render('revenue', {
                 faceSchema: groupedBlogsArray,
-                currentDate: currentDate
+                currentDate: currentDate,
+                isRevenue: true
             });
         } catch (error) {
             next(error);

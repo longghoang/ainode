@@ -1,128 +1,150 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link rel="stylesheet" href="/css/header.css">
-    <link rel="stylesheet" href="/css/me.css">
+    <title>Parking Spot Viewer</title>
     <link rel="stylesheet" href="/css/reset.css">
-</head>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/capture.css">
+   
+    <style>
+        .parking-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr); /* Chia thành 6 cột */
+            gap: 20px; /* Khoảng cách giữa các ô */
+        }
 
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f8f9fa;
-        margin: 0;
-        padding: 0;
-    }
-    .container {
-        margin-top: 100px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-    }
-    .back {
-        display: inline-flex;
-        align-items: center;
-        margin-bottom: 20px;
-        color: #007bff;
-        transition: color 0.3s;
-        text-decoration: none;
-    }
-    .back:hover {
-        color: #0056b3;
-    }
-    .content {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-    }
-    .profile-card {
-        background-color: #fff;
-        border: 1px solid #dee2e6;
-        border-radius: 5px;
-        padding: 20px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        width: 100%;
-        max-width: 400px;
-    }
-    h1 {
-        font-weight: bold;
-        margin-bottom: 20px;
-        color: #343a40;
-        text-align: center;
-    }
-    .form-label {
-        font-weight: bold;
-        color: #495057;
-    }
-    .mb-3 {
-        margin-bottom: 15px;
-    }
-    a {
-        text-decoration: none;
-        color: #007bff;
-        transition: color 0.3s;
-    }
-    a:hover {
-        color: #0056b3;
-    }
-    .btn-danger {
-        display: inline-block;
-        padding: 10px 20px;
-        color: #fff;
-        background-color: #dc3545;
-        border: none;
-        border-radius: 5px;
-        text-align: center;
-        cursor: pointer;
-        transition: background-color 0.3s;
-        text-decoration: none;
-    }
-    .btn-danger:hover {
-        background-color: #c82333;
-    }
-    .btn-refresh {
-        display: inline-block;
-        padding: 10px 20px;
-        color: #fff;
-        background-color: #28a745;
-        border: none;
-        border-radius: 5px;
-        text-align: center;
-        cursor: pointer;
-        transition: background-color 0.3s;
-        margin-top: 20px;
-    }
-    .btn-refresh:hover {
-        background-color: #218838;
-    }
-    .form-label {
-        font-size: 18px;
-        color: #212529;
-        font-weight: bold;
-        text-align: center;
-        display: block;
-    }
-</style>
+        .parking-spot {
+            width: 40px; /* Độ rộng của ô đỗ xe */
+            height: 63px; /* Chiều cao của mỗi hàng */
+            border: 1px solid black; /* Viền đen */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .occupied {
+            background-color: green; /* Màu nền khi có xe đỗ */
+        }
+
+        .vacant {
+            background-color: rgb(255, 255, 255); /* Màu nền khi trống */
+        }
+
+        body {
+            margin-top: 50px; /* Khoảng cách từ đầu trang */
+            display: flex;
+            justify-content: center;
+        }
+
+        .note {
+            font-size: 14px;
+            margin-top: 100px;
+            text-align: right;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: large;
+            font-weight: bold;
+            vertical-align: middle;
+        }
+
+        .box {
+            width: 30px;
+            height: 30px; 
+            background-color: green;
+            display: inline-block; 
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .container {
+            margin-top: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Căn chỉnh nội dung lên trên */
+            flex-direction: row; /* Sắp xếp nội dung theo hàng ngang */
+            gap: 20px; /* Khoảng cách giữa các phần tử */
+        }
+
+        .profile-card {
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .profile-card h1 {
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #343a40;
+            text-align: center;
+        }
+
+        .profile-card .form-label {
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .profile-card .mb-3 {
+            margin-bottom: 15px;
+        }
+
+        .profile-card .btn-refresh {
+            display: inline-block;
+            padding: 10px 20px;
+            color: #fff;
+            background-color: #28a745;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+
+        .profile-card .btn-refresh:hover {
+            background-color: #218838;
+        }
+
+        .profile-card .form-label {
+            font-size: 18px;
+            color: #212529;
+            font-weight: bold;
+            text-align: center;
+            display: block;
+        }
+    </style>
+</head>
 <body>
     <%- include('partials/header') %>
     <div class="container">
-        <div class="content">
-            <div class="profile-card">
-                <h1>Parking Spot Overview</h1>
-                <form>
-                    <div class="mb-3">
-                        <label for="postCount" class="form-label">Parking spots currently occupied: <%= totalPosts %>/100</label>
-                    </div>
-                </form>
-                <button class="btn-refresh" onclick="location.reload();">Refresh</button>
-            </div>
+        <!-- Phần form -->
+        <div class="profile-card">
+            <h1>Parking Spot Overview</h1>
+            <form>
+                <div class="mb-3">
+                    <label for="postCount" class="form-label">Parking spots currently occupied: <%= totalPosts %>/100</label>
+                </div>
+            </form>
+            <button class="btn-refresh" onclick="location.reload();">Refresh</button>
+        </div>
+
+        <!-- Phần grid -->
+        <div class="parking-grid">
+            <% spots.forEach(function(spot) { %>
+                <div class="<%= spot.occupiedClass %> parking-spot"></div>
+            <% }); %>
         </div>
     </div>
+
+    <div class="note"><span class="box"></span>Occupied</div>
+
 </body>
+
 </html>
