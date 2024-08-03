@@ -1,0 +1,25 @@
+<% if ( typeof time!=='undefined' && time>0 ) { %>
+<div id="countdown" data-time="<%= time %>" style="font-size: 2rem; color: #333;">
+    <span id="timer"><%= time %> giây</span>
+</div>
+<% } else { %>
+<div id="countdown" style="font-size: 2rem; color: #333;">
+    <span id="timer">Hết giờ!</span>
+</div>
+<% } %>
+<script defer>
+    const countdown = document.getElementById('countdown');
+    const timerElement = document.getElementById('timer');
+    let timeLeft = parseInt(countdown.dataset.time, 10);
+    if(timeLeft && timeLeft > 0) {
+        function updateTimer() {
+            timeLeft--;
+            timerElement.textContent = `${timeLeft} giây`;
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                timerElement.textContent = "Hết giờ!";
+            }
+        } 
+        const timerInterval = setInterval(updateTimer, 1000);
+    }
+</script>
