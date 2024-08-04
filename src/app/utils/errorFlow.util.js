@@ -5,10 +5,18 @@ module.exports = function errorFlow(error, next) {
         console.log("Error status: ", error.response.status);
         console.log("Error response data: ", error.response.data);
 
-        // Extract error message from response data, with fallback options
-        const errorMessage = (error.response.data && error.response.data.message) ||
-                             (error.response.data && error.response.data.error) ||
-                             'An error occurred';
+        let errorMessage;
+        
+        if (typeof error.response.data === 'string' && error.response.data.includes('<html')) {
+            // If the response data is HTML, provide a generic error message
+            errorMessage = 'Received HTML error response from server';
+        } else if (error.response.data && error.response.data.message) {
+            errorMessage = error.response.data.message;
+        } else if (error.response.data && error.response.data.error) {
+            errorMessage = error.response.data.error;
+        } else {
+            errorMessage = 'An error occurred';
+        }
 
         console.log("Error message: ", errorMessage);
         next(createError(error.response.status, errorMessage));
