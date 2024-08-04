@@ -64,7 +64,7 @@ class Ticket {
             const hasTickets = formattedTickets.length > 0;
         
         
-            res.render('ManagmentTicket', { tickets: formattedTickets, hasTickets  });
+            res.render('ManagmentTicket', { tickets: formattedTickets, hasTickets, isTicket: true  });
           } catch (error) {
             next(error);
           }
