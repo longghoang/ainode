@@ -1,3 +1,4 @@
+const { signedCookie } = require('cookie-parser');
 const TicketRegistrationSchema = require('../models/Ticket.model') 
 const moment = require('moment');
 class Ticket {
@@ -23,9 +24,16 @@ class Ticket {
             homeDelivery,
             uid,
         };
+
   
         const newTicket = new TicketRegistrationSchema(data);
         await newTicket.save();
+
+       
+           
+   
+
+        
   
   
         res.redirect('/');

@@ -1,8 +1,10 @@
 
-
 const faceSchema = require('../models/Face.model');
+const Revenue = require('../models/Revenue.model');
 const faceapi = require('face-api.js');
 const { Canvas, Image, ImageData } = require('canvas');
+
+
 faceapi.env.monkeyPatch({ Canvas, Image, ImageData });
 
 class Scan {
@@ -27,22 +29,45 @@ class Scan {
     }
 
     /// scan
-    async scan (req, res, next) {
-       
+    async scan(req, res, next) {
         try {
             const { descriptors, licensePlate } = req.body;
-
-          
+    
             if (!descriptors || descriptors.length === 0) {
                 return res.status(400).json({ error: 'No face data provided.' });
             }
+    
+            // Lưu thông tin xe vào faceSchema
             const newFace = new faceSchema({ descriptors, licensePlate, scannedSuccessfully: true });
             await newFace.save();
-            res.status(200).json({ message: 'Face data saved successfully!' });
+    
+            // Tính doanh thu và lưu vào mô hình Revenue
+            const currentDate = new Date().toISOString().slice(0, 10);
+            let revenueRecord = await Revenue.findOne({ date: currentDate });
+    
+            if (!revenueRecord) {
+                revenueRecord = new Revenue({ date: currentDate, totalVehicles: 0, totalRevenue: 0 });
+            }
+    
+            // Giả định phí gửi xe là 10,000 VNĐ
+            const vehicleFee = 10000; 
+    
+            // Cập nhật số lượng xe và doanh thu
+            
+            revenueRecord.totalVehicles += 1;
+            revenueRecord.totalRevenue += vehicleFee;
+
+            console.log("venua", revenueRecord)
+    
+            await revenueRecord.save();
+    
+            res.status(200).json({ message: 'Face data saved successfully and revenue updated!' });
         } catch (error) {
-           next(error)
+            console.error("Error processing scan data:", error);
+            next(error);
         }
     }
+    
 
 
     //compare
@@ -97,15 +122,17 @@ class Scan {
             }
 
             ///
-            
-    
-            
+                
             res.status(200).json({ results });
-            
         } catch (error) {
             next(error);
         }
     }
+
+
+
+
+
 
 }
 

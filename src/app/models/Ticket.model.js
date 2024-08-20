@@ -13,6 +13,7 @@ const TicketRegistrationSchema = new Schema({
     receiveLocation: { type: String, required: true },
     photo: { type: String, required: true },
     uid: { type: Schema.Types.ObjectId, ref: 'User' },
+    // regised: { type: Boolean, default: false }
 });
 
 module.exports = mongoose.model('TicketRegistration', TicketRegistrationSchema);
