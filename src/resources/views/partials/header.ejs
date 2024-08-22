@@ -72,7 +72,7 @@
         </div>
     </div>
     <% if (typeof isAuth==='undefined' && typeof isMe==='undefined' && typeof isHelp==='undefined' && typeof isEmploy==='undefined' && 
-    typeof isTicket==='undefined' && typeof isTicket==='undefined' && typeof isVerify=='undefined' && typeof isScan==='undefined' && typeof isEmpty==='undefined'&& typeof isRevenue==='undefined'&& typeof isTicket==='undefined' ) { %>
+    typeof isTicket==='undefined' && typeof isTicket==='undefined' && typeof isVerify=='undefined' && typeof isScan==='undefined' && typeof isEmpty==='undefined'&& typeof isRevenue==='undefined'&& typeof isTicket==='undefined' && typeof isPayment==='undefined' ) { %>
     <div class="header__ele header__right">
         <nav class="header__funcs">
             <% if (typeof user!=='undefined' && user.level > 10) { %>
@@ -81,7 +81,7 @@
                     <ul class="header__subfuncs">
                         <li class="header__subfunc"><a href="/scan" class="header__link">Vehicle identification</a></li>
                         <li class="header__subfunc"><a href="/revenue" class="header__link">Revenue management</a></li>
-                        <li class="header__subfunc"><a href="/scan/scanPlate" class="header__link">Report statistics</a></li>
+                        <li class="header__subfunc"><a href="http://localhost:8080/" class="header__link">Vehicle Management</a></li>
                     </ul>
                 </li>
             <% } %>

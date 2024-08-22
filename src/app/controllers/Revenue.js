@@ -1,6 +1,7 @@
 const moment = require('moment');
 const faceSchema = require('../models/Face.model');
 const Revenue = require('../models/Revenue.model');
+const plateSchema = require('../models/Plates.model');
 
 
 class storedController {
@@ -90,6 +91,52 @@ class storedController {
             next(error);
         }
     }
+
+        //payment
+        async payment(req, res, next) {
+            try {
+             
+                const vehicle = await plateSchema.findOne({ paid: false }).sort({ timestamp_in: -1 }).lean();
+        
+                if (vehicle) {
+                    if (vehicle.timestamp_out) {
+                        const timeIn = new Date(vehicle.timestamp_in).getTime();
+                        const timeOut = new Date(vehicle.timestamp_out).getTime();
+                        const durationInSeconds = (timeOut - timeIn) / 1000; 
+                        vehicle.duration = durationInSeconds; 
+                        vehicle.cost = durationInSeconds * 5000; 
+                    } else {
+                        vehicle.duration = "Chưa rời khỏi";
+                        vehicle.cost = "Chưa rời khỏi"; 
+                    }
+        
+                    // Thêm ngày tháng cho xe
+                    const date = new Date(vehicle.timestamp_in);
+                    vehicle.date = date.toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+                }
+        
+                res.render('payment', { vehicles: vehicle ? [vehicle] : [], isPayment: true });
+            } catch (err) {
+                next(err);
+            }
+        }
+
+        //
+                //payment
+                async payments(req, res, next) {
+                    try {
+                        await plateSchema.updateMany({ paid: false }, { $set: { paid: true } });
+                        res.json({ success: true });
+                    } catch (err) {
+                        res.status(500).json({ success: false, message: err.message });
+                    }
+                }
+        
+        
+        
+        
+
+
 }
 
 module.exports = new storedController();

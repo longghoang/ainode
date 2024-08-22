@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doanh Thu</title>
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/capture.css">
+    <%- include('partials/header') %>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            height: 100vh;
+            width: 100vw;
+            padding: 80px;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .qr-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .qr-container img {
+            width: 150px;
+            height: 150px;
+            margin-top: 10px;
+        }
+        .qr-container p {
+            font-size: 18px;
+            color: #333;
+            margin-top: 10px;
+        }
+        .btn-back {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #5cb85c;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .btn-back:hover {
+            background-color: #4cae4c;
+        }
+        #pay-now {
+            background-color: #007bff;
+            color: #fff;
+            border: 1px solid #007bff;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        #pay-now:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+        #pay-now i {
+            font-size: 18px;
+        }
+        .notification {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #28a745;
+            color: #fff;
+            padding: 20px 30px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            z-index: 1000;
+            font-size: 18px;
+            max-width: 90%;
+            text-align: center;
+        }
+        .notification.error {
+            background-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <h1>Thông tin thanh toán</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Biển số</th>
+                <th>Thời gian</th>
+                <th>Thời gian vào</th>
+                <th>Thời gian ra</th>
+                <th>Tổng thời gian (giây)</th>
+                <th>Chi phí (VNĐ)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% vehicles.forEach(function(vehicle) { %>
+            <tr>
+                <td><%= vehicle.plate_text %></td>
+                <td><%= vehicle.date %></td> <!-- Hiển thị ngày tháng -->
+                <td>
+                    <%= new Date(vehicle.timestamp_in).toLocaleTimeString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }) %> <!-- Hiển thị thời gian vào -->
+                </td>
+                <td>
+                    <%= vehicle.timestamp_out ? new Date(vehicle.timestamp_out).toLocaleTimeString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }) : "Chưa rời khỏi" %> <!-- Hiển thị thời gian ra -->
+                </td>
+                <td>
+                    <%= typeof vehicle.duration === 'number' ? vehicle.duration + ' giây' : vehicle.duration %>
+                </td>
+                <td>
+                    <%= typeof vehicle.cost === 'number' ? vehicle.cost.toLocaleString('vi-VN') + ' VNĐ' : vehicle.cost %>
+                </td>
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+    <div class="qr-container">
+        <p>Quét mã QR để thanh toán</p>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://127.0.0.1:8080/payment_info" alt="QR Code">
+    </div>
+
+    <div style="text-align: center;">
+        <a id="pay-now" class="btn-back">
+            <i class="fa fa-credit-card" aria-hidden="true"></i> Thanh toán ngay
+        </a>
+    </div>
+
+    <!-- Thông báo -->
+    <div id="notification" class="notification"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+    <script>
+        document.getElementById('pay-now').addEventListener('click', function(e) {
+            e.preventDefault();
+            fetch('/revenue/payments', { 
+                method: 'POST' 
+            })
+            .then(response => response.json())
+            .then(data => {
+                const notification = document.getElementById('notification');
+                if (data.success) {
+                    notification.textContent = 'Thanh toán thành công!';
+                    notification.classList.remove('error');
+                } else {
+                    notification.textContent = 'Có lỗi xảy ra. Vui lòng thử lại.';
+                    notification.classList.add('error');
+                }
+                notification.style.display = 'block';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 5000); // 5 giây
+            });
+        });
+    </script>
+</body>
+</html>
